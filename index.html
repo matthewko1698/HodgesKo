@@ -8,20 +8,16 @@
   <body>
     <svg>
     </svg>
-    <p class="day">0</p>
+    <!-- <p class="day">0</p> -->
     <button type="button" name="p" class='p'>Prev</button>
     <button type="button" name="n" class ='n'>Next</button>
   </body>
   <script type="text/javascript">
 
     var data = d3.json('gradeDataTime.json').then(function(data){
+
         initialize(data);
-        d3.select('.p').on('click',function(data){
-            updatep(data);
-        })
-        // d3.select('.n').on('click',function(d,i){
-        //     update(d,i);
-        // })
+        buttonUpdate(data,-1);
     })
 
     var initialize = function(data){
@@ -59,7 +55,9 @@
                      })
                      .attr('y',height/2)
                      .attr('width',barWidth)
-                     .attr('height',height/2)
+                     .attr('height',function(d){
+                       return height/2;
+                     })
                      .attr('fill',function(d){
                        return colors(d.name)
                      });
@@ -73,14 +71,56 @@
                       .attr('y',height+margins.bottom/3)
                       .text(function(d){
                         return d.name;
-                      })
+                      });
+
+
     }
 
-    var updatep = function(d){
+    var update = function(d,day){
+        var svgwidth = 700;
+        var svgheight = 500;
+        var margins =
+        {
+          top:20,
+          bottom:50,
+          left:50,
+          right:100
+        }
 
-        var day = d3.select('.day').innerHtml;
-        var daynum = Number(day);
+        var width = svgwidth -margins.left - margins.right;
+        var height = svgheight -margins.top - margins.bottom;
+
+        var svg = d3.select('svg');
+
+        var yScale = d3.scaleLinear()
+                       .domain([0,100])
+                       .range([height,0]);
+
+        svg.selectAll('rect').data( d[day].grades ).transition()
+                     .duration(1000)
+                     .attr('height',function(d){
+                       return d.grade*height/100;
+                     })
+                     .attr('y',function(d){
+
+                      return height-d.grade*height/100;
+
+                    });
         console.log(day);
+        buttonUpdate(d,day);
+
+    }
+
+    var buttonUpdate = function(data,day){
+
+      d3.select('.p').on('click',function(){
+
+           update(data,day-1);
+      })
+
+      d3.select('.n').on('click',function(){
+          update(data,day+1);
+      })
 
     }
 
