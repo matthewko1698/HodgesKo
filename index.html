@@ -22,8 +22,8 @@
 
     var initialize = function(data){
 
-      var svgwidth = 700;
-      var svgheight = 500;
+      var svgwidth = 1200;
+      var svgheight = 700;
 
       var svg = d3.select('svg').attr('width',svgwidth).attr('height',svgheight);
       var margins =
@@ -97,17 +97,23 @@
                       })
                       .classed('grades',true)
                       .attr('fill',function(d){
-                        return colors(d.name);
-                      });
+                        return 'white';
+                      })
+                      .style('visibility','hidden');
 
       rect.on("mouseover",function(){
         d3.select(this)
            .attr("fill","black");
 
+        d3.selectAll('.grades')
+          .style('visibility','visible')
+
       })
       .on('mouseout',function(d){
         d3.select(this)
-           .attr("fill",colors(d.name))
+           .attr("fill",colors(d.name));
+        d3.selectAll('.grades')
+          .style('visibility','hidden');
       });
 
       var names = plot.selectAll('.names').data(data[0].grades)
@@ -125,8 +131,8 @@
     }
 
     var update = function(d,day,pday){
-        var svgwidth = 700;
-        var svgheight = 500;
+        var svgwidth = 1200;
+        var svgheight = 700;
         var margins =
         {
           top:20,
@@ -159,7 +165,9 @@
            .transition()
            .duration(1000)
            .attr('y',function(d){
-             return height-d.grade*height/100+30;
+             if((height-d.grade*height/100+30)>height)
+                {return height;}
+             else{return height-d.grade*height/100+30}
            })
            .text(function(d){
              return d.grade;
