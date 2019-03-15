@@ -8,7 +8,7 @@
   <body>
     <svg>
     </svg>
-    <!-- <p class="day">0</p> -->
+    <p class="day">Day: --</p>
     <button type="button" name="p" class='p'>Prev</button>
     <button type="button" name="n" class ='n'>Next</button>
   </body>
@@ -17,7 +17,7 @@
     var data = d3.json('gradeDataTime.json').then(function(data){
 
         initialize(data);
-        buttonUpdate(data,-1);
+        buttonUpdate(data,-1,0);
     })
 
     var initialize = function(data){
@@ -37,6 +37,15 @@
       var width = svgwidth -margins.left - margins.right;
       var height = svgheight -margins.top - margins.bottom;
 
+      var yScale = d3.scaleLinear()
+                     .domain([0,100])
+                     .range([height,0]);
+
+      var yAxis = d3.axisLeft(yScale);
+      svg.append('g').classed('yScale',true)
+         .call(yAxis)
+         .attr('transform','translate('+(margins.left+10)+","+margins.top+')')
+
       var barWidth= width/5;
 
       var colors = d3.scaleOrdinal(d3.schemeSet1);
@@ -44,7 +53,7 @@
       var plot = svg.append('g').classed('plot',true)
               .attr('transform','translate('+margins.left+","+margins.top+")");
 
-      var rect = plot.selectAll('rect')
+      var rect = plot.selectAll('.rects')
                      .data( data[0].grades)
                      .enter()
                      .append('rect')
@@ -62,7 +71,46 @@
                        return colors(d.name)
                      });
 
-      var names = plot.selectAll('text').data(data[0].grades)
+     var change = plot.selectAll('.change')
+                    .data( data[0].grades)
+                    .enter()
+                    .append('rect')
+                    .classed('change',true)
+                    .attr('x', function(d,i){
+                      return i*(width/4)+margins.left;
+                    })
+                    .attr('y',height/2)
+                    .attr('width',barWidth)
+                    .attr('height',0)
+                    .attr('fill','grey');
+
+      var textBox = plot.selectAll('text')
+                      .data(data[0].grades)
+                      .enter()
+                      .append('text')
+                      .attr('x',function(d,i){
+                        return i *(width/4)+margins.left+45;
+                      })
+                      .attr('y',height/2+30)
+                      .text(function(d){
+                        return d.grade;
+                      })
+                      .classed('grades',true)
+                      .attr('fill',function(d){
+                        return colors(d.name);
+                      });
+
+      rect.on("mouseover",function(){
+        d3.select(this)
+           .attr("fill","black");
+
+      })
+      .on('mouseout',function(d){
+        d3.select(this)
+           .attr("fill",colors(d.name))
+      });
+
+      var names = plot.selectAll('.names').data(data[0].grades)
                       .enter()
                       .append('text')
                       .attr('x',function(d,i){
@@ -76,7 +124,7 @@
 
     }
 
-    var update = function(d,day){
+    var update = function(d,day,pday){
         var svgwidth = 700;
         var svgheight = 500;
         var margins =
@@ -96,7 +144,7 @@
                        .domain([0,100])
                        .range([height,0]);
 
-        svg.selectAll('rect').data( d[day].grades ).transition()
+        svg.selectAll('.rect').data( d[day].grades ).transition()
                      .duration(1000)
                      .attr('height',function(d){
                        return d.grade*height/100;
@@ -106,7 +154,20 @@
                       return height-d.grade*height/100;
 
                     });
+
+        svg.selectAll('.grades').data( d[day].grades )
+           .transition()
+           .duration(1000)
+           .attr('y',function(d){
+             return height-d.grade*height/100+30;
+           })
+           .text(function(d){
+             return d.grade;
+           });
+
+
         console.log(day);
+        d3.select('.day').text('Day: '+(day+1));
         buttonUpdate(d,day);
 
     }
@@ -114,12 +175,11 @@
     var buttonUpdate = function(data,day){
 
       d3.select('.p').on('click',function(){
-
-           update(data,day-1);
+           update(data,day-1,day);
       })
 
       d3.select('.n').on('click',function(){
-          update(data,day+1);
+          update(data,day+1,day);
       })
 
     }
