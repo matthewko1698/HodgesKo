@@ -132,7 +132,8 @@
                     .attr('y',height/2)
                     .attr('width',barWidth)
                     .attr('height',0)
-                    .attr('fill','grey');
+                    .attr('fill','grey')
+                    .style('opacity',0.65);
 
       var textBox = plot.selectAll('text')
                       .data(data[0].grades)
