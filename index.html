@@ -4,26 +4,55 @@
     <script type="text/javascript" src='d3.js'>
 
     </script>
+    <style media="screen">
+      button{
+        width:100px;
+        height:75px;
+      }
+      p{
+        font-size:2em;
+      }
+    </style>
   </head>
   <body>
+    <h1>Survey of Grades over 10 Day Period</h1>
     <svg>
     </svg>
-    <!-- <p class="day">0</p> -->
+    <p class="day">Day: 1</p>
     <button type="button" name="p" class='p'>Prev</button>
     <button type="button" name="n" class ='n'>Next</button>
+    <h2>Notes</h2>
+    <ul>
+      <li>Day is presented</li>
+      <li>Two buttons that change day</li>
+      <li>Data presented with bars</li>
+      <li>Animation changes height of bars</li>
+      <li>Hovering allows viewer to drill into data and see accompanying grade for that day</li>
+      <li>Extra:Axes and Gradient filled blocks visual additions</li>
+      <li>Extra: To accompany the transition, a block showing the change
+      from the current day being displayed from the last day displayed.
+      <ul>
+        <li>If red, the bar moved down from the last day displayed, and the height represents how much
+        the grade changed. The change block does not overlap with the current grade bar to show the change.</li>
+        <li>If green, the bar moved up from the last day displayed, and the
+        height represents the increase in bar height from the last day, overlapping with the current grade block to
+        show the change.</li>
+      </ul>
+      </li>
+    </ul>
   </body>
   <script type="text/javascript">
 
     var data = d3.json('gradeDataTime.json').then(function(data){
 
         initialize(data);
-        buttonUpdate(data,-1);
+        buttonUpdate(data,0,0);
     })
 
     var initialize = function(data){
 
-      var svgwidth = 700;
-      var svgheight = 500;
+      var svgwidth = 900;
+      var svgheight = 600;
 
       var svg = d3.select('svg')
                   .attr('width',svgwidth)
@@ -39,6 +68,34 @@
       var width = svgwidth -margins.left - margins.right;
       var height = svgheight -margins.top - margins.bottom;
 
+      var defs = svg.append("defs");
+
+      var linearGradient = defs.append("linearGradient")
+                  .attr("id", "linear-gradient");
+
+      linearGradient
+              .attr("x1", "0%")
+              .attr("y1", "0%")
+              .attr("x2", "0%")
+              .attr("y2", "100%");
+
+      linearGradient.append("stop")
+          .attr("offset", "0%")
+          .attr("stop-color", "#e291d9");
+
+      linearGradient.append("stop")
+          .attr("offset", "100%")
+          .attr("stop-color", "#79c8e5");
+
+      var yScale = d3.scaleLinear()
+                     .domain([0,100])
+                     .range([height,0]);
+
+      var yAxis = d3.axisLeft(yScale);
+      svg.append('g').classed('yScale',true)
+         .call(yAxis)
+         .attr('transform','translate('+(margins.left+10)+","+margins.top+')')
+
       var barWidth= width/5;
 
       var colors = d3.scaleOrdinal(d3.schemeSet1);
@@ -46,7 +103,7 @@
       var plot = svg.append('g').classed('plot',true)
               .attr('transform','translate('+margins.left+","+margins.top+")");
 
-      var rect = plot.selectAll('rect')
+      var rect = plot.selectAll('.rects')
                      .data( data[0].grades)
                      .enter()
                      .append('rect')
@@ -55,20 +112,81 @@
 
                        return i*(width/4)+margins.left;
                      })
-                     .attr('y',height/2)
-                     .attr('width',barWidth)
                      .attr('height',function(d){
-                       return height/2;
+                       return d.grade*height/100;
                      })
-                     .attr('fill',function(d){
-                       return colors(d.name)
-                     });
+                     .attr('y',function(d){
 
-      var names = plot.selectAll('text').data(data[0].grades)
+                       return height-d.grade*height/100;
+
+                     })
+                     .attr('width',barWidth)
+                     .attr('fill',"url(#linear-gradient)");
+
+     var change = plot.selectAll('.change')
+                    .data( data[0].grades)
+                    .enter()
+                    .append('rect')
+                    .classed('change',true)
+                    .attr('x', function(d,i){
+                      return i*(width/4)+margins.left;
+                    })
+                    .attr('y',height/2)
+                    .attr('width',barWidth)
+                    .attr('height',0)
+                    .attr('fill','grey')
+                    .style('opacity',0.65);
+
+      var textBox = plot.selectAll('text')
+                      .data(data[0].grades)
                       .enter()
                       .append('text')
                       .attr('x',function(d,i){
-                        return i*(width/4)+margins.left+barWidth/3;
+                        return i*(width/4)+margins.left+barWidth/2-20;
+                      })
+                      .attr('y',height/2+30)
+                      .text(function(d){
+                        return d.grade;
+                      })
+                      .classed('grades',true)
+                      .attr('fill',function(d){
+                        return 'white';
+                      })
+                      .style('visibility','hidden')
+                      .style('pointer-events','none');
+
+      rect.on("mouseover",function(){
+        d3.select(this)
+           .attr("fill","black");
+
+        d3.selectAll('.grades')
+          .style('visibility','visible')
+
+      })
+      .on('mouseout',function(d){
+        d3.select(this)
+           .attr("fill","url(#linear-gradient)");
+        d3.selectAll('.grades')
+          .style('visibility','hidden');
+      });
+
+      change.on("mouseover",function(){
+
+        d3.selectAll('.grades')
+          .style('visibility','visible')
+
+      })
+      .on('mouseout',function(d){
+
+        d3.selectAll('.grades')
+          .style('visibility','hidden');
+      })
+
+      var names = plot.selectAll('.names').data(data[0].grades)
+                      .enter()
+                      .append('text')
+                      .attr('x',function(d,i){
+                        return i*(width/4)+margins.left+barWidth/2-20;
                       })
                       .attr('y',height+margins.bottom/3)
                       .text(function(d){
@@ -78,9 +196,9 @@
 
     }
 
-    var update = function(d,day){
-        var svgwidth = 700;
-        var svgheight = 500;
+    var update = function(d,day,pday){
+        var svgwidth = 900;
+        var svgheight = 600;
         var margins =
         {
           top:20,
@@ -94,11 +212,30 @@
 
         var svg = d3.select('svg');
 
+        var defs = svg.append("defs");
+
+        var linearGradient2 = defs.append("linearGradient")
+                    .attr("id", "linear-gradient");
+
+        linearGradient2
+                .attr("x1", "0%")
+                .attr("y1", "0%")
+                .attr("x2", "0%")
+                .attr("y2", "100%");
+
+        linearGradient2.append("stop")
+            .attr("offset", "0%")
+            .attr("stop-color", "#ffa474");
+
+        linearGradient2.append("stop")
+            .attr("offset", "100%")
+            .attr("stop-color", "#8b0000");
+
         var yScale = d3.scaleLinear()
                        .domain([0,100])
                        .range([height,0]);
 
-        svg.selectAll('rect').data( d[day].grades ).transition()
+        svg.selectAll('.rect').data( d[day].grades ).transition()
                      .duration(1000)
                      .attr('height',function(d){
                        return d.grade*height/100;
@@ -108,7 +245,70 @@
                       return height-d.grade*height/100;
 
                     });
+
+        svg.selectAll('.grades').data( d[day].grades )
+           .transition()
+           .duration(1000)
+           .attr('y',function(d){
+             if((height-d.grade*height/100+30)>height)
+                {return height-20;}
+             else{return height-20;}
+           })
+           .text(function(d){
+             return d.grade;
+           });
+
+        if((pday>(-1))&&(day>(-1))&&(pday<10)&&(day<10)){
+             var pgrade=[
+               d[pday].grades[0].grade,
+               d[pday].grades[1].grade,
+               d[pday].grades[2].grade,
+               d[pday].grades[3].grade
+             ]
+        }
+        else{
+          var pgrade=[
+          0,0,0,0
+          ]
+        }
+        svg.selectAll('.change').data(d[day].grades)
+           .transition()
+           .duration(1000)
+           .attr('y',function(d,i){
+
+              if(d.grade<pgrade[i]){
+                return height-pgrade[i]*height/100;
+              }
+              else{
+                return height-d.grade*height/100;
+              }
+
+
+           })
+           .attr('height',function(d,i){
+
+             // if(pgrade[i]==0){return 0;}
+             if(d.grade<pgrade[i]){
+               return pgrade[i]*height/100-d.grade*height/100;
+             }
+             else{
+               return d.grade*height/100-pgrade[i]*height/100;
+             }
+           }).
+           attr('fill',function(d,i){
+             if(d.grade<pgrade[i]){
+               return 'red';
+             }
+             else{
+               return 'green';
+             }
+
+           })
+
+
+
         console.log(day);
+        d3.select('.day').text('Day: '+(day+1));
         buttonUpdate(d,day);
 
     }
@@ -116,12 +316,11 @@
     var buttonUpdate = function(data,day){
 
       d3.select('.p').on('click',function(){
-
-           update(data,day-1);
+           update(data,day-1,day);
       })
 
       d3.select('.n').on('click',function(){
-          update(data,day+1);
+          update(data,day+1,day);
       })
 
     }
