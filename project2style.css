@@ -28,3 +28,8 @@ table{
   fill:none;
   stroke:black;
 }
+.students{
+  width:10%;
+  height: 100%
+  float:left;
+}

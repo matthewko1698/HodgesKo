@@ -1,6 +1,6 @@
 var data = d3.json('classData.json').then(function(data){
 
-    initialize(data,0,19);
+    initialize(data,0,14);
     // update(data,0,0);
 });
 
