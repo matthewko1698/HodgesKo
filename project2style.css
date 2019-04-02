@@ -1,0 +1,25 @@
+.one{
+  float:right;
+  display: block;
+  clear: left;
+
+}
+.two{
+  display: inline-block;
+  height: 35%;
+  width:40%;
+  vertical-align: top;
+
+}
+.second{
+  float:right;
+  width:80%;
+  height:35%;
+}
+table{
+  display: inline-block;
+  clear:right;
+  float: right;
+  width:40%;
+  vertical-align: top;
+}
