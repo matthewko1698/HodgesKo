@@ -2,6 +2,7 @@
   float:right;
   display: block;
   clear: left;
+  padding-bottom: 50px;
 
 }
 .two{
@@ -22,4 +23,8 @@ table{
   float: right;
   width:40%;
   vertical-align: top;
+}
+.line{
+  fill:none;
+  stroke:black;
 }
