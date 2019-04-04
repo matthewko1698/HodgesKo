@@ -194,6 +194,13 @@ var initialize = function(data, day, student){
               .attr('width',svgwidth)
               .attr('height',svgheight);
 
+  var legendwidth = window.innerWidth*0.14;
+
+  var legend = d3.select('.two')
+              .attr('height',svgheight)
+              .attr('width',legendwidth);
+
+
   var quizAverage= function(data,day,student){
     return data[student].quizes[day].grade/data[student].quizes[day].max;
   };
@@ -474,6 +481,9 @@ var initialize = function(data, day, student){
      .classed('hidden',true)
      .attr('d',linemake)
      .attr('transform','translate('+(margins.left)+","+margins.top+')');
+     // .style('stroke',function(d){
+     //   return d3.interpolatePiYG(d);
+     // });
      // .curve(d3.curveCatmullRom);
 
   // svg.append('path')
@@ -495,6 +505,34 @@ var initialize = function(data, day, student){
   svg.append('g').classed('xAxis',true)
      .call(xAxis)
      .attr("transform", "translate("+(margins.left)+","+(margins.top+height)+")");
+
+  var xLabel = ['Class Day'];
+
+  svg.selectAll('.xLabel').data(xLabel).enter().append('text')
+     .classed('xLabel',true)
+     .attr('x',function(d){
+       return svgwidth/2;
+     })
+     .attr('y',function(d){
+       return svgheight-5;
+     })
+     .text('Class Day')
+     .style('fill','white');
+
+  var yLabel = [0];
+
+  svg.selectAll('.yLabel').data(yLabel).enter().append('text')
+     .classed('yLabel',true)
+     .classed('hidden',true)
+     .attr('x',function(d){
+       return 5;
+     })
+     .attr('y',function(d){
+       return svgheight/2-16;
+     })
+     .text('Grade')
+     .style('fill','white');
+
 
 
   var selectorBar = d3.select('.students');
@@ -531,7 +569,11 @@ var initialize = function(data, day, student){
                if(clicked){
 
                  d3.selectAll('.triangle').classed('hidden',true);
-                 d3.selectAll('img').style('height','4.1%');
+                 d3.selectAll('img').style('height',function(d){
+
+                    return imheight+'px';
+
+                  });
                  d3.selectAll('img').style('border-style','none')
                                 .style('border-width','0px')
                                 .style('border-color','white');
@@ -545,21 +587,33 @@ var initialize = function(data, day, student){
                                 .style('border-width','5px')
                                 .style('border-color','red')
 
+                 d3.select('.yLabel').classed('hidden',false);
+
                }
                if(!clicked){
 
                  d3.selectAll('.triangle').classed('hidden',false);
-                 d3.selectAll('img').style('height','4.1%');
+                 d3.selectAll('img').style('height',function(d){
+
+                    return imheight+'px';
+
+                  });
                  d3.selectAll('img').style('border-style','none')
                                 .style('border-width','0px')
                                 .style('border-color','white');
-                 d3.select(this).style('height',"4.1%");
+                 d3.select(this).style('height',function(d){
+
+                    return imheight+'px';
+
+                  });
 
 
 
                  d3.select('.specificYaxis').classed('hidden',true);
                  d3.select('.grid').classed('hidden',false);
                  d3.select('.line').classed('hidden',true);
+
+                 d3.select('.yLabel').classed('hidden',true);
 
 
                }
@@ -669,5 +723,44 @@ rowTrimake(classData,19);
 rowTrimake(classData,20);
 rowTrimake(classData,21);
 rowTrimake(classData,22);
+
+// legend
+var gradescale = [1,0.8,0.6,0.4,0.2,0];
+
+var legendheight = svgheight/20;
+legend.selectAll('rect').data(gradescale).enter()
+      .append('rect')
+      .classed('hidden',false)
+      .attr('x',function(d){
+        return legendwidth/2;
+      })
+      .attr('y',function(d,i){
+
+        return i*50+300;
+
+      })
+      .attr('width',legendheight)
+      .attr('height',legendheight)
+      .attr('fill',function(d){
+
+        return d3.interpolatePiYG(d);
+
+      });
+
+  legend.selectAll('text').data(gradescale).enter()
+        .append('text')
+        .classed('hidden',false)
+        .attr('x',function(d){
+          return legendwidth/2-50;
+        })
+        .attr('y',function(d,i){
+          return i*50+320;
+        })
+        .text(function(d){
+
+          return d*100+"%";
+        })
+        .attr('fill','white')
+
 
 }

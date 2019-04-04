@@ -17,9 +17,12 @@ svg{
 }
 .two{
   display: inline-block;
-  height: 35%;
-  width:40%;
+  /* height: 90%; */
+  /* width:17%; */
   vertical-align: top;
+  padding-top: 2%;
+  float:right;
+  /* position:fixed; */
 
 }
 .second{
