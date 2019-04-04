@@ -475,12 +475,7 @@ var initialize = function(data, day, student){
                    .y1(function(d){return lineyScale(d.grades)})
                    .curve(d3.curveCatmullRom);
 
-  svg.append('path')
-     .datum(averages)
-     .classed('line',true)
-     .classed('hidden',true)
-     .attr('d',linemake)
-     .attr('transform','translate('+(margins.left)+","+margins.top+')');
+
      // .style('stroke',function(d){
      //   return d3.interpolatePiYG(d);
      // });
@@ -747,6 +742,13 @@ rowTrimake(classData,19);
 rowTrimake(classData,20);
 rowTrimake(classData,21);
 rowTrimake(classData,22);
+
+svg.append('path')
+   .datum(averages)
+   .classed('line',true)
+   .classed('hidden',true)
+   .attr('d',linemake)
+   .attr('transform','translate('+(margins.left)+","+margins.top+')');
 
 // legend
 var gradescale = [1,0.8,0.6,0.4,0.2,0];
