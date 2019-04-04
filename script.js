@@ -516,6 +516,7 @@ var initialize = function(data, day, student){
                 return imheight+'px';
 
                })
+             .style('padding-bottom','1')
              .on('click',function(d,i){
 
                d3.select(this).classed('clicked', !d3.select(this).classed("clicked"));
