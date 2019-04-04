@@ -14,7 +14,7 @@ svg{
   vertical-align: top;
   padding-top: 2%;
   position:fixed;
-  margin-left:4%;
+  margin-left:5%;
 }
 .two{
   display: inline-block;
@@ -71,8 +71,12 @@ img{
 }
 .xAxis line, .xAxis path, .xAxis text{
   stroke:white;
+  font-family:Dosis;
+  font-size:1.5em;
 }
 
 .specificYaxis line, .specificYaxis path, .specificYaxis text{
   stroke:white;
+  font-family:Dosis;
+  font-size:1.5em;
 }

@@ -127,7 +127,7 @@ var update = function(data,day,student){
   ];
 
 
-  var svgwidth= window.innerWidth*0.8;
+  var svgwidth= window.innerWidth*0.79;
   var svgheight= window.innerHeight*0.9;
 
   var margins =
@@ -176,7 +176,7 @@ var update = function(data,day,student){
 
 var initialize = function(data, day, student){
 
-  var svgwidth= window.innerWidth*0.8;
+  var svgwidth= window.innerWidth*0.79;
   var svgheight= window.innerHeight*0.9;
 
   var margins =
@@ -517,7 +517,8 @@ var initialize = function(data, day, student){
        return svgheight-5;
      })
      .text('Class Day')
-     .style('fill','white');
+     .style('fill','white')
+     .style('font-family','Dosis');
 
   var yLabel = [0];
 
@@ -531,7 +532,8 @@ var initialize = function(data, day, student){
        return svgheight/2-16;
      })
      .text('Grade')
-     .style('fill','white');
+     .style('fill','white')
+     .style('font-family','Dosis');
 
 
 
@@ -761,6 +763,7 @@ legend.selectAll('rect').data(gradescale).enter()
           return d*100+"%";
         })
         .attr('fill','white')
+        .style('font-family','Dosis');
 
   var tridata = ['0','-30','60'];
   var legendupTri = d3.symbol().type(d3.symbolTriangle).size(150);
@@ -795,10 +798,11 @@ legend.selectAll('.tritext').data(tridata).enter()
         if(i==1){return 'No Change'}
         else{return "Grade Decrease"}
       })
-      .attr('fill','white');
+      .attr('fill','white')
+      .style('font-family','Dosis');
 
 
-var tit = ['Average Grade','By Day'];
+var tit = ['Daily Average','Grades','Interactive','Visualization'];
 
 legend.selectAll('.title').data(tit).enter().append('text')
       .classed('hidden',false)
