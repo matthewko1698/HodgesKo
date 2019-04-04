@@ -628,12 +628,18 @@ var initialize = function(data, day, student){
 
 
                var lineclicked = !d3.select('.line').classed('hidden');
+               var clicked = d3.select(this).classed('clicked');
 
-               if(lineclicked){d3.selectAll('.triangle').style('opacity','0');}
+               if(lineclicked){d3.selectAll('.triangle').style('opacity','0');
+                    if(clicked){d3.selectAll('.triangle'+i).style('opacity','1');}
+
+               }
                else{
                  d3.selectAll('.triangle').style('opacity','0.4');
                  d3.selectAll('.triangle'+i).style('opacity','1');
                }
+
+
 
              })
              .on('mouseout',function(d,i){
