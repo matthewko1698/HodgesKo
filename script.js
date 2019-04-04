@@ -630,12 +630,33 @@ var initialize = function(data, day, student){
 
                d3.select(this).style('cursor','pointer').style('box-shadow','0px 0px 5px black')
 
+
+
+               var lineclicked = !d3.select('.line').classed('hidden');
+
+               if(lineclicked){d3.selectAll('.triangle').style('opacity','0');}
+               else{
+                 d3.selectAll('.triangle').style('opacity','0.4');
+                 d3.selectAll('.triangle'+i).style('opacity','1');
+               }
+
              })
              .on('mouseout',function(d,i){
 
                // d3.select(this).transition().duration(500).style('height','4.1%');
 
                d3.select(this).style('box-shadow','0px 0px 0px black');
+               d3.selectAll('.triangle').style('opacity','1');
+
+               // d3.select(this).classed('clicked', !d3.select(this).classed("clicked"));
+
+               var lineclicked = !d3.select('.line').classed('hidden');
+
+               if(lineclicked){d3.selectAll('.triangle').style('opacity','0');}
+               else{
+                 d3.selectAll('.triangle').style('opacity','1');
+                 d3.selectAll('.triangle'+i).style('opacity','1');
+               }
              })
 
  specificyScale = d3.scaleLinear()
@@ -669,6 +690,7 @@ var rowTrimake = function(data,student){
         .attr('d',upTri)
         .classed('triangle',true)
         .classed('hidden',false)
+        .classed('triangle'+student,true)
         .attr('fill',function(d,i){
 
             // console.log(colorscale(d.grade));
