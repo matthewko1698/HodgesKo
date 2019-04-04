@@ -499,6 +499,11 @@ var initialize = function(data, day, student){
 
   var selectorBar = d3.select('.students');
 
+  var itdist = height/23;
+
+  var imheight = svgheight/25;
+  console.log('window: '+svgheight)
+
   selectorBar.selectAll('img').data(data).enter()
              .append('img')
              .attr("src",function(d,i){
@@ -506,6 +511,11 @@ var initialize = function(data, day, student){
              })
              .classed('clicked',false)
              .style('clear','right')
+             .style('height',function(d){
+
+                return imheight+'px';
+
+               })
              .on('click',function(d,i){
 
                d3.select(this).classed('clicked', !d3.select(this).classed("clicked"));
@@ -587,7 +597,7 @@ var initialize = function(data, day, student){
        .classed('hidden',false)
        .attr("transform", "translate("+(-100)+","+(0)+")");
 
-var itdist = height/23;
+
 
 
 var upTri = d3.symbol().type(d3.symbolTriangle).size((height/23)*4);
