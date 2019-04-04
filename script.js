@@ -747,7 +747,7 @@ legend.selectAll('rect').data(gradescale).enter()
 
       });
 
-  legend.selectAll('text').data(gradescale).enter()
+  legend.selectAll('.colortext').data(gradescale).enter()
         .append('text')
         .classed('hidden',false)
         .attr('x',function(d){
@@ -761,6 +761,59 @@ legend.selectAll('rect').data(gradescale).enter()
           return d*100+"%";
         })
         .attr('fill','white')
+
+  var tridata = ['0','-30','60'];
+  var legendupTri = d3.symbol().type(d3.symbolTriangle).size(150);
+
+  legend.selectAll('.legendTri')
+        .data(tridata)
+        .enter()
+        .append('path')
+        .attr('d',legendupTri)
+        .classed('hidden',false)
+        .attr('fill',function(d){
+          return 'white'
+        })
+        .attr('transform',function(d,i){
+
+            return 'translate('+(legendwidth/2-70)+','+(i*50+150)+")"+' rotate('+(d)+')';
+
+        });
+
+legend.selectAll('.tritext').data(tridata).enter()
+      .append('text')
+      .classed('hidden',false)
+      .attr('x',function(d){
+        return legendwidth/2-30;
+      })
+      .attr('y',function(d,i){
+        return i*50+150;
+      })
+      .text(function(d,i){
+
+        if(i==0){return "Grade Increase"}
+        if(i==1){return 'No Change'}
+        else{return "Grade Decrease"}
+      })
+      .attr('fill','white');
+
+
+var tit = ['Average Grade','By Day'];
+
+legend.selectAll('.title').data(tit).enter().append('text')
+      .classed('hidden',false)
+      .attr('x',function(d){
+        return 5;
+      })
+      .attr('y',function(d,i){
+        return 30+i*30;
+      })
+      .text(function(d){
+        return d;
+      })
+      .attr('fill','white')
+      .style('font-family','Dosis')
+      .style('font-size','2em');
 
 
 }
