@@ -132,9 +132,9 @@ var update = function(data,day,student){
 
   var margins =
   {
-    top:20,
-    bottom:20,
-    left:50,
+    top:5,
+    bottom:50,
+    left:80,
     right:50
   }
 
@@ -181,9 +181,9 @@ var initialize = function(data, day, student){
 
   var margins =
   {
-    top:20,
-    bottom:20,
-    left:50,
+    top:5,
+    bottom:50,
+    left:80,
     right:50
   }
 
@@ -518,30 +518,40 @@ var initialize = function(data, day, student){
                d3.select(this).classed('clicked',clicked);
 
 
-
-
-
-
                if(clicked){
 
                  d3.selectAll('.triangle').classed('hidden',true);
                  d3.selectAll('img').style('height','4.1%');
+                 d3.selectAll('img').style('border-style','none')
+                                .style('border-width','0px')
+                                .style('border-color','white');
                  d3.select(this).style('height','7%');
 
                  d3.select('.specificYaxis').classed('hidden',false);
                  d3.select('.grid').classed('hidden',true);
                  d3.select('.line').classed('hidden',false);
 
+                 d3.select(this).style('border-style','outset')
+                                .style('border-width','5px')
+                                .style('border-color','red')
+
                }
                if(!clicked){
 
                  d3.selectAll('.triangle').classed('hidden',false);
                  d3.selectAll('img').style('height','4.1%');
+                 d3.selectAll('img').style('border-style','none')
+                                .style('border-width','0px')
+                                .style('border-color','white');
                  d3.select(this).style('height',"4.1%");
+
+
 
                  d3.select('.specificYaxis').classed('hidden',true);
                  d3.select('.grid').classed('hidden',false);
                  d3.select('.line').classed('hidden',true);
+
+
                }
                update(data,0,i);
 
@@ -549,13 +559,17 @@ var initialize = function(data, day, student){
              })
              .on('mouseover',function(d,i){
 
-               d3.select(this).style('cursor','pointer');
+               // d3.select(this).style('cursor','pointer').transition().duration(500)
+               //                .style('height','7%');
+
+               d3.select(this).style('cursor','pointer').style('box-shadow','0px 0px 5px black')
 
              })
              .on('mouseout',function(d,i){
 
-               // d3.select(this).style('height','4.1%')
+               // d3.select(this).transition().duration(500).style('height','4.1%');
 
+               d3.select(this).style('box-shadow','0px 0px 0px black');
              })
 
  specificyScale = d3.scaleLinear()
