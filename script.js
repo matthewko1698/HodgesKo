@@ -573,8 +573,10 @@ var initialize = function(data, day, student){
        .classed('hidden',false)
        .attr("transform", "translate("+(-100)+","+(0)+")");
 
+var itdist = height/23;
 
-var upTri = d3.symbol().type(d3.symbolTriangle).size(100);
+
+var upTri = d3.symbol().type(d3.symbolTriangle).size((height/23)*4);
 
 var colorscale = d3.interpolateHslLong('#ffa777','#59f9a1');
 
@@ -587,9 +589,6 @@ var rowTrimake = function(data,student){
         .attr('d',upTri)
         .classed('triangle',true)
         .classed('hidden',false)
-        .attr('transform',function(d,i){
-                   return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*27.2)+")";
-        })
         .attr('fill',function(d,i){
 
             // console.log(colorscale(d.grade));
@@ -607,13 +606,13 @@ var rowTrimake = function(data,student){
           // console.log(prevgrade)
           var difference = d.grades-prevgrade;
           if(difference>0){
-            return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*27.2)+")";
+            return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*itdist)+")";
           }
           else if (difference<0) {
-            return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*27.2)+")" +" rotate(60)";
+            return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*itdist)+")" +" rotate(60)";
           }
           else{
-            return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*27.2)+")"+ " rotate(-30)";
+            return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*itdist)+")"+ " rotate(-30)";
           }
 
 

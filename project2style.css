@@ -5,6 +5,7 @@ body{
 svg{
   background: linear-gradient(#83b2db,#4082bc);
   border-radius: 20px;
+  margin-left:20px;
 }
 .one{
   float:right;
