@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css?family=Dosis');
 body{
 
-  background-color: #152838;
+  background-color: #202321;
 }
 svg{
-  background: linear-gradient(#83b2db,#4082bc);
+  background: linear-gradient(#91a4ad,#91a4ad);
   border-radius: 20px;
   margin-left:20px;
 }

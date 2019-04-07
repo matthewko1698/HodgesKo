@@ -635,7 +635,7 @@ var initialize = function(data, day, student){
 
                }
                else{
-                 d3.selectAll('.triangle').style('opacity','0.2');
+                 d3.selectAll('.triangle').style('opacity','0.15');
                  d3.selectAll('.triangle'+i).style('opacity','1');
                }
 
@@ -652,8 +652,16 @@ var initialize = function(data, day, student){
                // d3.select(this).classed('clicked', !d3.select(this).classed("clicked"));
 
                var lineclicked = !d3.select('.line').classed('hidden');
+               var clicked = d3.select(this).classed('clicked');
 
-               if(lineclicked){d3.selectAll('.triangle').style('opacity','0');}
+               if(lineclicked){
+
+                 d3.selectAll('.triangle').style('opacity','0');
+
+                 if(clicked){
+                   d3.selectAll('.triangle'+i).style('opacity','1');
+                 }
+               }
                else{
                  d3.selectAll('.triangle').style('opacity','1');
                  d3.selectAll('.triangle'+i).style('opacity','1');
@@ -712,7 +720,14 @@ var rowTrimake = function(data,student){
 
         })
         .style('stroke',function(d,i){
-          return d3.interpolatePiYG(d.grades);
+
+          if(d.grades>0.5){return d3.interpolateGnBu(
+
+            d.grades*2-1
+
+          );}
+          else{return 'darkred';}
+
         })
         .style('stroke-width','3')
         .attr('transform',function(d,i){
@@ -772,7 +787,7 @@ svg.append('path')
    .attr('transform','translate('+(margins.left)+","+margins.top+')');
 
 // legend
-var gradescale = [1,0.8,0.6,0.4,0.2,0];
+var gradescale = [1,0.85,0.7,0.65,0.5,0];
 
 var legendheight = svgheight/20;
 legend.selectAll('rect').data(gradescale).enter()
@@ -790,7 +805,14 @@ legend.selectAll('rect').data(gradescale).enter()
       .attr('height',legendheight)
       .attr('fill',function(d){
 
-        return d3.interpolatePiYG(d);
+        if(d>0.5){return d3.interpolateGnBu(
+
+          d*2-1
+
+        );}
+        else{return 'darkred';}
+
+
 
       });
 
