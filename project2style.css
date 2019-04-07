@@ -83,4 +83,5 @@ img{
 }
 .triangle{
   stroke:#2a5172;
+  stroke-bottom: white;
 }

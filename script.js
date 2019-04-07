@@ -635,7 +635,7 @@ var initialize = function(data, day, student){
 
                }
                else{
-                 d3.selectAll('.triangle').style('opacity','0.4');
+                 d3.selectAll('.triangle').style('opacity','0.2');
                  d3.selectAll('.triangle'+i).style('opacity','1');
                }
 
@@ -678,7 +678,18 @@ var initialize = function(data, day, student){
 
 
 
-var upTri = d3.symbol().type(d3.symbolTriangle).size((height/23)*4);
+// var upTri = d3.symbol().type(d3.symbolTriangle).size((height/23)*4);
+
+// var upTri = d3.arc().innerRadius(5).outerRadius(10).startAngle(5.5).endAngle(7.07);
+
+
+var lineData = [{'x':-7, 'y':7},{'x':0,'y':0},{'x':7,'y':7}]
+
+var upTri = d3.line().x(function(d) { return d.x; })
+                     .y(function(d) { return d.y; });
+
+
+
 
 var colorscale = d3.interpolateHslLong('#ffa777','#59f9a1');
 
@@ -688,7 +699,7 @@ var rowTrimake = function(data,student){
         .data(data[student])
         .enter()
         .append('path')
-        .attr('d',upTri)
+        .attr('d',upTri(lineData))
         .classed('triangle',true)
         .classed('hidden',false)
         .classed('triangle'+student,true)
@@ -696,10 +707,14 @@ var rowTrimake = function(data,student){
 
             // console.log(colorscale(d.grade));
 
-            return d3.interpolatePiYG(d.grades);
+            return 'none';
 
 
         })
+        .style('stroke',function(d,i){
+          return d3.interpolatePiYG(d.grades);
+        })
+        .style('stroke-width','3')
         .attr('transform',function(d,i){
           var prevgrade = 0.6;
           // console.log("prevday:"+(i-1))
@@ -709,13 +724,13 @@ var rowTrimake = function(data,student){
           // console.log(prevgrade)
           var difference = d.grades-prevgrade;
           if(difference>0){
-            return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*itdist)+")";
+            return 'translate('+(margins.left+linexScale(d.day))+','+(11+student*itdist)+")";
           }
           else if (difference<0) {
-            return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*itdist)+")" +" rotate(60)";
+            return 'translate('+(margins.left+linexScale(d.day))+','+(16+student*itdist)+")" +" rotate(180)";
           }
           else{
-            return 'translate('+(margins.left+linexScale(d.day))+','+(17+student*itdist)+")"+ " rotate(-30)";
+            return 'translate('+(margins.left+linexScale(d.day)+3)+','+(12+student*itdist)+")"+ " rotate(90)";
           }
 
 
