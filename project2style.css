@@ -3,8 +3,12 @@ body{
 
   background-color: #202321;
 }
+h1,li{
+  color:#e8f9ff;
+  font-size: 150%;
+}
 svg{
-  background: linear-gradient(#91a4ad,#91a4ad);
+  background: linear-gradient(#4f5c60,#4f5c60);
   border-radius: 20px;
   margin-left:20px;
 }

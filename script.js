@@ -726,7 +726,7 @@ var rowTrimake = function(data,student){
             d.grades*2-1
 
           );}
-          else{return 'darkred';}
+          else{return '#961c1c';}
 
         })
         .style('stroke-width','3')
@@ -810,7 +810,7 @@ legend.selectAll('rect').data(gradescale).enter()
           d*2-1
 
         );}
-        else{return 'darkred';}
+        else{return '#961c1c';}
 
 
 
@@ -833,37 +833,55 @@ legend.selectAll('rect').data(gradescale).enter()
         .style('font-family','Dosis');
 
   var tridata = ['0','-30','60'];
+  var tritextdata = ['0','-30','60','90'];
   var legendupTri = d3.symbol().type(d3.symbolTriangle).size(150);
+
+  var lineData2 = [{'x':-14, 'y':14},{'x':0,'y':0},{'x':14,'y':14}]
 
   legend.selectAll('.legendTri')
         .data(tridata)
         .enter()
         .append('path')
-        .attr('d',legendupTri)
+        .attr('d',upTri(lineData2))
         .classed('hidden',false)
         .attr('fill',function(d){
-          return 'white'
+          return 'none'
         })
+        .style('stroke','white')
+        .style('stroke-width','5')
         .attr('transform',function(d,i){
 
-            return 'translate('+(legendwidth/2-70)+','+(i*50+150)+")"+' rotate('+(d)+')';
+          if(i==0){
+            return 'translate('+(legendwidth/2-60)+','+(i*50+140)+")";
+          }
+          else if (i==1) {
+            return 'translate('+(legendwidth/2-60)+','+(i*50+150)+")" +" rotate(180)";
+          }
+          else{
+            return 'translate('+(legendwidth/2-55)+','+(i*50+140)+")"+ " rotate(90)";
+          }
+
+            // return 'translate('+(legendwidth/2-70)+','+(i*50+140)+")"+' rotate('+(d)+')';
 
         });
 
-legend.selectAll('.tritext').data(tridata).enter()
+legend.selectAll('.tritext').data(tritextdata).enter()
       .append('text')
       .classed('hidden',false)
       .attr('x',function(d){
         return legendwidth/2-30;
       })
       .attr('y',function(d,i){
-        return i*50+150;
+        if(i!=3){return i*50+150;}
+        else{return height - 3}
+
       })
       .text(function(d,i){
 
         if(i==0){return "Grade Increase"}
         if(i==1){return 'No Change'}
-        else{return "Grade Decrease"}
+        if(i==2){return "Grade Decrease"}
+        else{return "*Use 100% Zoom"}
       })
       .attr('fill','white')
       .style('font-family','Dosis');
