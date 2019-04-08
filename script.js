@@ -855,10 +855,11 @@ legend.selectAll('rect').data(gradescale).enter()
             return 'translate('+(legendwidth/2-60)+','+(i*50+140)+")";
           }
           else if (i==1) {
-            return 'translate('+(legendwidth/2-60)+','+(i*50+150)+")" +" rotate(180)";
+            return 'translate('+(legendwidth/2-55)+','+(i*50+140)+")"+ " rotate(90)";
           }
           else{
-            return 'translate('+(legendwidth/2-55)+','+(i*50+140)+")"+ " rotate(90)";
+
+            return 'translate('+(legendwidth/2-60)+','+(i*50+150)+")" +" rotate(180)";
           }
 
             // return 'translate('+(legendwidth/2-70)+','+(i*50+140)+")"+' rotate('+(d)+')';
