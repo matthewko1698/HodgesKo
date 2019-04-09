@@ -787,7 +787,7 @@ svg.append('path')
    .attr('transform','translate('+(margins.left)+","+margins.top+')');
 
 // legend
-var gradescale = [1,0.85,0.7,0.65,0.5,0];
+var gradescale = [1,0.85,0.7,.55,0.5,0];
 
 var legendheight = svgheight/20;
 legend.selectAll('rect').data(gradescale).enter()
@@ -825,9 +825,9 @@ legend.selectAll('rect').data(gradescale).enter()
         .attr('y',function(d,i){
           return i*50+320;
         })
-        .text(function(d){
-
-          return d*100+"%";
+        .text(function(d,i){
+          if(i==3){return '55%'}
+          else{return d*100+"%";}
         })
         .attr('fill','white')
         .style('font-family','Dosis');
